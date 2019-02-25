@@ -1,0 +1,10 @@
+Student Name: Emmanuel Espinosa-Tello
+Input File Name: input1.txt
+CPU Scheduling Alg: FIFO
+Process 1 is completed at 5 ms
+Process 2 is completed at 12 ms
+Process 3 is completed at 18 ms
+Process 4 is completed at 22 ms
+Average Waiting time = 8.75 ms
+Average Turnaround time = 14.25 ms
+Throughput = 0.18 jobs per ms

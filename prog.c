@@ -25,6 +25,9 @@ void HTp(struct PCB_st *p);
 void push(struct PCB_st *p);
 void setTail();
 void FIFO_Scheduling();
+void SJF_Scheduling();
+void PR_Scheduling();
+void RR_Scheduling();
 
 int main(int argc, char* argv[])
 {
@@ -32,7 +35,10 @@ int main(int argc, char* argv[])
     char buffer[12];
     int i;
     char inputf[50], algo[50];
-
+    /*
+    char arrays fill with null terminators will make for easy string comparison
+    as the strcpy will only overwrite what is needed and the rest is null terminated
+    */
     memset(inputf, '\0', sizeof(inputf));
     memset(algo, '\0', sizeof(algo));
 
@@ -41,18 +47,21 @@ int main(int argc, char* argv[])
         if(strcmp(argv[i], "-input") == 0)
             strcpy(inputf, argv[i+1]);
 
-        if(strcmp(argv[i], "-alg") == 0)
+        else if(strcmp(argv[i], "-alg") == 0)
             strcpy(algo, argv[i+1]);
+        else
+            continue;
     }
 
-
+    //Opening the file
     f = fopen(inputf, "r");
     if (f == NULL)
     {
         fprintf(stderr, "Failed to open file: %s\n", inputf);
         exit(1);
-    }
-
+    }   
+    //Using a buffer to read in line per line from the file and setting the appropriate
+    //blocks
     while (fgets(buffer, 100, f))
     {
         struct PCB_st *PCB = malloc(sizeof(struct PCB_st));
@@ -89,8 +98,20 @@ int main(int argc, char* argv[])
     printf("Student Name: Emmanuel Espinosa-Tello\n");
     printf("Input File Name: %s\n", inputf);
     printf("CPU Scheduling Alg: %s\n", algo);
-    
-    FIFO_Scheduling();
+    //strcmp if else statments to decide which algo will be used
+    if(strcmp(algo, "FIFO") == 0)
+        FIFO_Scheduling(); 
+    else if (strcmp(algo, "SJF") == 0)
+        SJF_Scheduling();
+    else if (strcmp(algo, "PR") == 0)
+        PR_Scheduling();
+    else if (strcmp(algo, "RR") == 0)
+        RR_Scheduling();
+    else
+    {
+        fprintf(stderr, "Failed to provide algorithm: -alg \"algorithm\"\n");
+        exit(1);
+    }
 
     return 0;
     
@@ -110,7 +131,7 @@ void setTail()
         current = current->next;
     }
     Tail = current;
-    //free(current);
+    current = NULL;
 }
 /*
     Takes the pointer to struct and iterates through the current linked list until
@@ -128,7 +149,7 @@ void push(struct PCB_st *p)
         current = current->next;
     }
     current->next = p;
-    //free(current);
+    current = NULL;
     return;
 }
 
@@ -136,7 +157,7 @@ void FIFO_Scheduling()
 {
     int i;
     struct PCB_st *PCB = Head;
-
+    //start at the head and process each block one by one until head-> is null and finally terminate
     while(Head->next != NULL || Head == Tail)
     {
         for(i = 0; i < (sizeof(PCB->Reg)/sizeof(PCB->Reg[0])); i++)
@@ -153,13 +174,16 @@ void FIFO_Scheduling()
         Total_job = Total_job + 1;
         
         printf("Process %d is completed at %d ms\n", PCB->ProcId, CLOCK);
-        
+        //if head and tail are the same the end has been reached
         if(Head == Tail)
         {
             free(Head);
+            Head = NULL;
+            Tail = NULL;
+            PCB = NULL;
             break;
         }
-
+        //free current top, set new one
         PCB = Head->next;
         free(Head);
         Head = PCB;
@@ -169,4 +193,19 @@ void FIFO_Scheduling()
     printf("Average Waiting time = %2.2lf ms\n", ((double)Total_waiting_time/Total_job));
     printf("Average Turnaround time = %2.2lf ms\n", ((double)Total_turnaround_time/Total_job));
     printf("Throughput = %2.2lf jobs per ms\n", ((double)Total_job/CLOCK));
+}
+
+void SJF_Scheduling()
+{
+    return;
+}
+
+void PR_Scheduling()
+{
+    printf("Part not complete\n");
+}
+
+void RR_Scheduling()
+{
+    printf("Part not complete\n");
 }
