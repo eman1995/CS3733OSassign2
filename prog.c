@@ -24,6 +24,7 @@ int Total_job=0;
 void HTp(struct PCB_st *p);
 void push(struct PCB_st *p);
 void setTail();
+void FIFO_Scheduling();
 
 int main(int argc, char* argv[])
 {
@@ -76,7 +77,6 @@ int main(int argc, char* argv[])
         setTail();
 
         //printf("yo %d %d %d %d\n", scancount, PCB->ProcId, PCB->ProcPR, PCB->CPUburst); //debug
-
     }
     
     close(f);
@@ -124,4 +124,9 @@ void push(struct PCB_st *p)
     current->next = p;
     //free(current);
     return;
+}
+
+void FIFO_Scheduling()
+{
+    
 }
