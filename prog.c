@@ -29,13 +29,28 @@ int main(int argc, char* argv[])
 {
     FILE *f;
     char buffer[12];
-    f = fopen(argv[1], "r");
+    int i;
+    char inputf[50], algo[50];
+
+    memset(inputf, '\0', sizeof(inputf));
+    memset(algo, '\0', sizeof(algo));
+
+    for (i=0; i< argc; i++)
+    {   
+        if(strcmp(argv[i], "-input") == 0)
+            strcpy(inputf, argv[i+1]);
+
+        if(strcmp(argv[i], "-alg") == 0)
+            strcpy(algo, argv[i+1]);
+    }
+
+
+    f = fopen(inputf, "r");
     if (f == NULL)
     {
-        fprintf(stderr, "Failed to open file: %s\n", argv[1]);
+        fprintf(stderr, "Failed to open file: %s\n", inputf);
         exit(1);
     }
-    
 
     while (fgets(buffer, 100, f))
     {
@@ -50,13 +65,13 @@ int main(int argc, char* argv[])
             , &PCB->ProcId
             , &PCB->ProcPR
             , &PCB->CPUburst);
-        int i;
+
         for (i = 0; i < (sizeof(PCB->Reg)/sizeof(PCB->Reg[0])); i++)
         {
             PCB->Reg[i] = PCB->ProcId;
             //printf("i = %d\n", PCB->Reg[i]);
         }
-        printf("blah %d\n", PCB->ProcPR);
+        //printf("blah %d\n", PCB->ProcPR);
         push(PCB);
         setTail();
 
@@ -68,8 +83,8 @@ int main(int argc, char* argv[])
     //printf("Tail value %d\n", Tail->ProcPR);
     //printf("Head value %d\n", Head->ProcPR);
     printf("Student Name: Emmanuel Espinosa-Tello\n");
-    printf("Input File Name: %s\n", argv[1]);
-    printf("CPU Scheduling Alg: %s\n", pe);
+    printf("Input File Name: %s\n", inputf);
+    printf("CPU Scheduling Alg: %s\n", algo);
     
     return 0;
     
